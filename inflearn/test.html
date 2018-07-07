@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>test code</title>
+</head>
+<body>
+  
+<script src="_.js"></script>
+<script>
+// console.log(
+//   document.querySelectorAll('*').map(function (node) {
+//     return node.nodeName;
+//   })
+// );
+
+//
+console.log(document.querySelectorAll('*'));
+
+//
+console.log(
+  _map(document.querySelectorAll('*'), function (node) {
+    return node.nodeName;
+  })
+);
+</script>
+</body>
+</html>
