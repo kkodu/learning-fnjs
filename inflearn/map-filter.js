@@ -120,3 +120,68 @@ console.log(
 	_map(
 		_filter(users, function (user) { return user.age < 30; }),
 		_get('age')));
+
+// pipe와 go를 통해 코드 작성
+function _each(list, iter) {
+  for (var i = 0; i < list.length; i++) {
+    iter(list[i]);
+  }
+  return list;
+}
+
+var slice = Array.prototype.slice;
+function _rest(list, num) {
+  return slice.call(list, num || 1);
+}
+function _reduce(list, iter, memo) {
+  if (arguments.length == 2) {
+    memo = list[0];
+    list = _rest(list); 
+  }
+  _each(list, function (val) {
+    memo = iter(memo, val);
+  });
+  return memo;
+}
+function _pipe() {
+  var fns = arguments;
+  return function (arg) {
+    return _reduce(fns, function(arg, fn) {
+      return fn(arg);
+    }, arg);
+  }
+}
+function _go(arg) {
+  var fns = _rest(arguments);
+  _pipe.apply(null, fns)(arg);
+}
+_go(users,
+	function (users) {
+		return _filter(users, function (user) {
+			return user.age >= 30;
+		});
+	},
+	function (users) {
+		return _map(users, _get('age'));
+	},
+	console.log
+)
+
+var _map = _curryr(_map),
+	_filter = _curryr(_filter);
+
+console.log(
+	_map(function (val) { return val * 2; })([1, 2, 3]));
+
+console.log(
+	_map([1, 2, 3], function (val) { return val * 2; }));
+
+_go(users,
+	_filter(function (user) { return user.age >= 30; }),
+	_map(_get('name')),
+	console.log);
+
+_go(users,
+	_filter(user => user.age < 30),
+	_map(_get('age')),
+	console.log);
